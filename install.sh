@@ -94,7 +94,9 @@ config_ns_records(){
 install_wp(){
 	echo -e "\nBegin WordPress installation and configuration"
 	# variables
+	wpdir=/var/www/html/admin
 	wp_config_file=$wpdir/wp-config.php
+	wp_config_temp_file=$wpdir/wp-config-temp.php
 	wp_home="https:\/\/www.$domain\/admin"
     wp_siteurl="https:\/\/www.$domain\/admin"
     path_current_site="\/admin"
@@ -102,8 +104,8 @@ install_wp(){
 
 	wget -c http://wordpress.org/latest.tar.gz > /dev/null
 	tar -xzvf latest.tar.gz > /dev/null
-	sudo mkdir /var/www/html/admin/
-	wpdir=/var/www/html/admin/
+	sudo mkdir $wpdir
+
 	sudo mv ./wordpress/* $wpdir > /dev/null
 	rmdir wordpress
 	sudo chown -R www-data:www-data $wpdir
@@ -111,7 +113,10 @@ install_wp(){
 	sudo chmod g+w $wpdir/wp-content
 	sudo chmod -R g+w $wpdir/wp-content/themes
 	sudo chmod -R g+w $wpdir/wp-content/plugins
-	sudo cp $wpdir/wp-config-sample.php $wp_config_file
+	# remove first install wp-config
+	sudo rm -rf $wpdir/wp-config-sample.php
+	# copy our config 
+	sudo cp ./wp-config-sample.php $wp_config_file
     SALT=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
     printf '%s\n' "g/secret-key-here/d" a "$SALT" . w | ed -s $wp_config_file
     sudo sed -i -e "s/database_name_here/"$dbname"/;s/username_here/"$dbuser"/" $wp_config_file
@@ -119,7 +124,9 @@ install_wp(){
     sudo sed -i "s/wp_home_here/"$wp_home"/;s/wp_siteurl_here/"$wp_siteurl"/" $wp_config_file
     sudo sed -i -e "s/domain_current_site_here/"$domain"/;s/path_current_site_here/"$path_current_site"/" $wp_config_file
     sudo sed -i -e "s/admin_cookie_path_here/"$admin_cookie_path"/" $wp_config_file
+	sudo cp $wp_config_file $wp_config_temp_file
 	sudo sudo cp ./.htaccess $wpdir
+	# sudo chown -R $USER:www-data /var/www/html
 	sudo systemctl restart apache2
 	echo -e "In your browser, go to $IP/admin and fill out the information."
 	read "Press ENTER when done to continue..."
@@ -128,13 +135,13 @@ install_wp(){
 }
 
 
-
 # Install and configure NGINX
 install_nginx(){		
 	echo -e "\nBegin NGINX installation and configuration..."
 	sudo apt-get install -y nginx > /dev/null
-	cp ./example.conf ./$domain.conf
-	sed -i "s/your_domain_here/$domain/" ./$domain.conf
+	sudo cp ./example.conf ./$domain.conf
+	sudo sed -i "s/your_domain_here/$domain/" ./$domain.conf
+	sudo sed -i "s/www.your_domain_here/www.$domain/" ./$domain.conf
 	sudo mv ./$domain.conf /etc/nginx/sites-available/
 	sudo ln -s /etc/nginx/sites-available/$domain.conf /etc/nginx/sites-enabled/
 	sudo mv /etc/nginx/sites-available/default.conf /etc/nginx/sites-available/default.conf.disabled
@@ -181,26 +188,29 @@ install_certificate_ssl(){
 	sudo chmod -R 600 /etc/nginx/ssl
 	sudo a2enmod ssl
 	sudo a2enmod rewrite
+	sudo systemctl stop apache2
 	sudo systemctl stop nginx
 	sudo mkdir /etc/systemd/system/nginx.service.d
 	sudo printf "[Service]\nExecStartPost=/bin/sleep 0.1\n" > /etc/systemd/system/nginx.service.d/override.conf
 	sudo cp ./ports.conf /etc/apache2/ports.conf
 	echo -e "\n<IfModule mod_rewrite>\n\tRewriteEngine On\n</IfModule>" | sudo tee -a /etc/apache2/apache2.conf > /dev/null
-	cp 000-default.conf temp-000-default.conf
-	sed -i "s/your_domain_here/$domain/g" temp-000-default.conf > /dev/null
+	sudo cp 000-default.conf temp-000-default.conf
+	sudo sed -i "s/your_domain_here/$domain/g" temp-000-default.conf > /dev/null
 	sudo mv ./temp-000-default.conf /etc/apache2/sites-available/000-default.conf
 	sudo rm /etc/nginx/sites-available/default
 	sudo rm /etc/nginx/sites-enabled/default
-	openssl genrsa -out server-key.pem 2048;
-	openssl req -new -key server-key.pem -out server-csr.pem
-	openssl x509 -req -in server-csr.pem -signkey server-key.pem -out server-cert.pem
+	sudo openssl genrsa -out server-key.pem 2048;
+	sudo openssl req -new -key server-key.pem -out server-csr.pem
+	sudo openssl x509 -req -in server-csr.pem -signkey server-key.pem -out server-cert.pem
 	sudo cp server-cert.pem /etc/nginx/ssl/$domain.chained.crt
 	sudo cp server-key.pem /etc/nginx/ssl/$domain.key
+	
 	sudo systemctl start nginx
+	sudo systemctl start apache2
 
-	systemctl daemon-reload
-	sudo systemctl start nginx
+	sudo systemctl daemon-reload
 	sudo systemctl restart apache2
+	sudo systemctl restart nginx
 	echo "End SSL installation and configuration"
 }
 
