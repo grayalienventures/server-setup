@@ -1,5 +1,5 @@
 #!/bin/bash
-
+current_dir=$(pwd) 
 echo "************************************************************
 *****          INTP LLC STANDARD SERVER SETUP          *****
 ************************************************************"
@@ -71,8 +71,8 @@ install_mysql(){
 	echo -e "\nBegin MySQL installation and configuration..."
 	sudo apt-get install -y mysql-server mysql-client > /dev/null
 	sudo mysql -u root -e "CREATE DATABASE $dbname; CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword';"
-	sudo mysql -u root -e "DROP USER 'root'@'localhost'; CREATE USER 'root'@'%' IDENTIFIED BY '$dbpassword'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-	sudo mysql -u root -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost'; FLUSH PRIVILEGES;"
+	sudo mysql -u root -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost';"
+	sudo mysql -u root -e "DROP USER 'root'@'localhost'; CREATE USER 'root'@'%' IDENTIFIED BY '$dbpassword'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 	echo "End MySQL installation and configuration"
 }
 
@@ -162,22 +162,35 @@ install_nginx(){
 install_react_app(){
 	echo -e "\nBeginning React installation and configuration..."
 	cd ~
+	dir=$(pwd) 
+	dir_node=$dir/"$slug"_node
+	dir_prototype_node=$dir/prototype-node
+
+	
 	git clone https://github.com/grayalienventures/prototype-node.git
-	mv ./prototype_node ./"$slug"_node
-	cd - 
-	cp .env ../"$slug"_node 
-	sed -i -e "s/yourdomainhere/"$domain"/;s/yourtitlehere/"$sitetitle"/" ../"$slug"_node/.env
-	cd ../"$slug"_node
-	cd -
-	cp ./webpack.config.js ../"$slug"_node/
-	cp ./localConfig.js ../"$slug"_node/src/
-	sed -i -e "s/yourslughere/"$slug"/" ../"$slug"_node/src/localConfig.js
-	cd ../"$slug"_node
+	mv $dir_prototype_node $dir_node
+	# make sure remove folder prototype_node
+	sudo rm -rf $dir_prototype_node
+	# copy .env
+	cp $current_dir/.env $dir_node/.env
+	# add domain to .env
+	sed -i -e "s/yourdomainhere/"$domain"/;s/yourtitlehere/"$sitetitle"/" $dir_node/.env
+	# add domain to .env
+	cp $current_dir/webpack.config.js $dir_node/webpack.config.js
+	# copy .localConfig
+	cp $current_dir/localConfig.js $dir_node/src/localConfig.js
+	# add domain to .localConfig
+	sed -i -e "s/yourslughere/"$slug"/" $dir_node/src/localConfig.js
+	cd $dir_node
+	# install dependencies
+	npm install -g concurrently
+	npm install -g nodemon
 	npm i
-	sudo nginx -t
 	npm run start-build </dev/null &>/dev/null &
-	cd -
+	
 	echo "End React installation and configuration"
+
+	cd $current_dir
 }
 
 # Install and configure SSL
@@ -204,7 +217,7 @@ install_certificate_ssl(){
 	sudo openssl x509 -req -in server-csr.pem -signkey server-key.pem -out server-cert.pem
 	sudo cp server-cert.pem /etc/nginx/ssl/$domain.chained.crt
 	sudo cp server-key.pem /etc/nginx/ssl/$domain.key
-	
+
 	sudo systemctl start nginx
 	sudo systemctl start apache2
 
