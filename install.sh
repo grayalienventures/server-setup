@@ -147,15 +147,24 @@ install_nginx(){
 	sudo mv /etc/nginx/sites-available/default.conf /etc/nginx/sites-available/default.conf.disabled
 	echo "End NGINX installation and configuration"
 
-	# Install NodeJS and NPM
+}
+
+# Install NodeJS and NPM
+install_node(){
 	echo -e "\nBegin NodeJS and NPM installation..."
+	curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 	sudo apt-get install -y nodejs > /dev/null
 	sudo apt-get install -y npm > /dev/null
+	# update nodejs
+	# sudo npm cache clean -f
+	# sudo npm install -g n
+	# sudo n stable
+	sudo ln -s /usr/bin/nodejs /usr/local/bin/node
 	sudo npm i -g nodemon > /dev/null
 	sudo npm i -g concurrently > /dev/null
 	sudo npm i -g npx > /dev/null
-	echo "End NodeJS and NPM installation"
 
+	echo "End NodeJS and NPM installation"
 }
 
 # Install and configure React
@@ -183,8 +192,6 @@ install_react_app(){
 	sed -i -e "s/yourslughere/"$slug"/" $dir_node/src/localConfig.js
 	cd $dir_node
 	# install dependencies
-	npm install -g concurrently
-	npm install -g nodemon
 	npm i
 	npm run start-build </dev/null &>/dev/null &
 	
