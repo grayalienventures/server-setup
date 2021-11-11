@@ -1,5 +1,5 @@
 #!/bin/bash
-current_dir=$(pwd) 
+
 echo "************************************************************
 *****          INTP LLC STANDARD SERVER SETUP          *****
 ************************************************************"
@@ -13,12 +13,43 @@ echo -e "\nEnter database name"
 read dbname
 echo -e "\nEnter database user"
 read dbuser
-echo -e "\nEnter database password (hidden input)"
-read -s dbpassword
+while true; do
+  echo -e "\nEnter database password (hidden input)"
+  read -s dbpassword
+  echo -e "\nEnter database password again (hidden input)"
+  read -s dbpassword2
+  if [[ ! -z "$dbpassword" && "$dbpassword" = "$dbpassword2" ]];
+	  then
+	  	break
+	else
+	  echo "Please try again"
+	fi
+done
 
+
+echo -e "\n*****          WordPress configuration           *****"
+
+echo -e "\nEnter email admin wordpress (email@example.com)"
+read admin_email
+
+while true; do
+  echo -e "\nEnter password admin wordpress (hidden input)"
+  read -s admin_password
+  echo -e "\nEnter password admin wordpress again (hidden input)"
+  read -s admin_password2
+  if [[ ! -z "$admin_password" && "$admin_password" = "$admin_password2" ]];
+	  then
+	  	break
+	else
+	  echo "Please try again"
+	fi
+done
 
 slug=`echo "$domain" | sed 's/.com//g;s/.net//g;s/.io//g'`
 
+current_dir=$(pwd) 
+current_user=$(whoami)
+wpdir=/var/www/html/admin
 # System memory increased
 # https://www.digitalocean.com/community/questions/npm-gets-killed-no-matter-what
 # https://stackoverflow.com/questions/38127667/npm-install-ends-with-killed
@@ -70,7 +101,7 @@ install_php(){
 install_mysql(){
 	echo -e "\nBegin MySQL installation and configuration..."
 	sudo apt-get install -y mysql-server mysql-client > /dev/null
-	sudo mysql -u root -e "CREATE DATABASE $dbname; CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword';"
+	sudo mysql -u root -e "CREATE DATABASE IF NOT EXISTS $dbname; CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpassword';"
 	sudo mysql -u root -e "GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost';"
 	sudo mysql -u root -e "DROP USER 'root'@'localhost'; CREATE USER 'root'@'%' IDENTIFIED BY '$dbpassword'; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 	echo "End MySQL installation and configuration"
@@ -92,9 +123,9 @@ config_ns_records(){
 
 # Install WordPress
 install_wp(){
-	echo -e "\nBegin WordPress installation and configuration"
+	echo -e "\nBegin WordPress installation"
 	# variables
-	wpdir=/var/www/html/admin
+
 	wp_config_file=$wpdir/wp-config.php
 	wp_config_temp_file=$wpdir/wp-config-temp.php
 	wp_home="https:\/\/www.$domain\/admin"
@@ -130,10 +161,22 @@ install_wp(){
 	sudo systemctl restart apache2
 	echo -e "In your browser, go to $IP/admin and fill out the information."
 	read "Press ENTER when done to continue..."
-	echo "End WordPress installation and configuration"
+	echo "End WordPress installation"
 
 }
-
+# config_wp
+config_wp(){
+	echo -e "\nBegin WordPress configuration"
+	cd $wpdir
+	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar  > /dev/null
+	chmod +x wp-cli.phar  > /dev/null
+	sudo mv wp-cli.phar /usr/local/bin/wp  > /dev/null
+	sudo -u www-data wp core install --url="http://$domain" --title="$sitetitle" --admin_user="$admin_email" --admin_password="$admin_password" --admin_email="$admin_email"
+ 	sudo -u www-data wp rewrite structure '/%postname%/'
+    sudo -u www-data wp rewrite flush
+	echo "End WordPress configuration"
+	cd $current_dir
+}
 
 # Install and configure NGINX
 install_nginx(){		
@@ -193,10 +236,10 @@ install_react_app(){
 	cd $dir_node
 	# install dependencies
 	npm i
-	npm run start-build </dev/null &>/dev/null &
+	npm run start-build-prod </dev/null &>/dev/null &
 	
 	echo "End React installation and configuration"
-
+	echo "Project Node installed in: $dir_node"
 	cd $current_dir
 }
 
@@ -228,7 +271,7 @@ install_certificate_ssl(){
 	sudo systemctl start nginx
 	sudo systemctl start apache2
 
-	sudo systemctl daemon-reload
+	# sudo systemctl daemon-reload
 	sudo systemctl restart apache2
 	sudo systemctl restart nginx
 	echo "End SSL installation and configuration"
@@ -243,5 +286,7 @@ install_mysql
 config_ns_records 
 install_wp 
 install_nginx 
+install_node
 install_react_app 
 install_certificate_ssl
+config_wp
