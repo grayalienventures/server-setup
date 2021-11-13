@@ -202,7 +202,6 @@ install_node(){
 	# sudo npm cache clean -f
 	# sudo npm install -g n
 	# sudo n stable
-	# sudo ln -s /usr/bin/nodejs /usr/local/bin/node
 	sudo npm i -g nodemon > /dev/null
 	sudo npm i -g concurrently > /dev/null
 	sudo npm i -g npx > /dev/null
