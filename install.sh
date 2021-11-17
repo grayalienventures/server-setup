@@ -270,9 +270,9 @@ install_certificate_ssl(){
 	sudo systemctl start nginx
 	sudo systemctl start apache2
 
-	# sudo systemctl daemon-reload
-	sudo service restart apache2
-	sudo service restart nginx
+	sudo systemctl daemon-reload
+	sudo service apache2 restart 
+	sudo service nginx restart 
 	echo "End SSL installation and configuration"
 }
 
