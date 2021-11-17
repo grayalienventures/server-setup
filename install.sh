@@ -195,7 +195,7 @@ install_nginx(){
 # Install NodeJS and NPM
 install_node(){
 	echo -e "\nBegin NodeJS and NPM installation..."
-	curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+	curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null
 	sudo apt-get install -y nodejs > /dev/null
 	sudo apt-get install -y npm > /dev/null
 	# update nodejs
@@ -212,7 +212,7 @@ install_node(){
 # Install and configure React
 install_react_app(){
 	echo -e "\nBeginning React installation and configuration..."
-	cd ~
+	cd ..
 	dir=$(pwd) 
 	dir_node=$dir/"$slug"_node
 	dir_prototype_node=$dir/prototype-node
@@ -237,8 +237,8 @@ install_react_app(){
 	npm i
 	npm run start-build-prod </dev/null &>/dev/null &
 	
-	echo "End React installation and configuration"
-	echo "Project Node installed in: $dir_node"
+	echo "\nEnd React installation and configuration"
+	echo "\nProject Node installed in: $dir_node"
 	cd $current_dir
 }
 
@@ -271,8 +271,8 @@ install_certificate_ssl(){
 	sudo systemctl start apache2
 
 	# sudo systemctl daemon-reload
-	sudo systemctl restart apache2
-	sudo systemctl restart nginx
+	sudo service restart apache2
+	sudo service restart nginx
 	echo "End SSL installation and configuration"
 }
 
