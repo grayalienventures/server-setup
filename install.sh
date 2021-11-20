@@ -219,24 +219,26 @@ install_react_app(){
 	dir_prototype_node=$dir/prototype-node
 
 	
-	git clone https://github.com/grayalienventures/prototype-node.git
-	mv $dir_prototype_node $dir_node
+	sudo -u $USER git clone https://github.com/grayalienventures/prototype-node.git
+	sudo -u $USER mv $dir_prototype_node $dir_node
 	# make sure remove folder prototype_node
 	sudo rm -rf $dir_prototype_node
 	# copy .env
-	cp $current_dir/.env $dir_node/.env
+	sudo -u $USER cp $current_dir/.env $dir_node/.env
 	# add domain to .env
-	sed -i -e "s/yourdomainhere/"$domain"/;s/yourtitlehere/"$sitetitle"/" $dir_node/.env
+	sudo -u $USER sed -i -e "s/yourdomainhere/"$domain"/;s/yourtitlehere/"$sitetitle"/" $dir_node/.env
 	# add domain to .env
-	cp $current_dir/webpack.config.js $dir_node/webpack.config.js
+	sudo -u $USER cp $current_dir/webpack.config.js $dir_node/webpack.config.js
 	# copy .localConfig
-	cp $current_dir/localConfig.js $dir_node/src/localConfig.js
+	sudo -u $USER cp $current_dir/localConfig.js $dir_node/src/localConfig.js
 	# add domain to .localConfig
-	sed -i -e "s/yourslughere/"$slug"/" $dir_node/src/localConfig.js
+	sudo -u $USER sed -i -e "s/yourslughere/"$slug"/" $dir_node/src/localConfig.js
 	cd $dir_node
 	# install dependencies
-	npm i
-	npm run start-build-prod </dev/null &>/dev/null &
+	sudo -u $USER npm i
+	sudo -u $USER npm rebuild 
+	sudo -u $USER npm i
+	sudo -u $USER npm run start-build-prod </dev/null &>/dev/null &
 	
 	echo "\nEnd React installation and configuration"
 	echo "\nProject Node installed in: $dir_node"
