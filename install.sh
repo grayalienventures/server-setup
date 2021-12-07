@@ -178,6 +178,32 @@ config_wp(){
 	cd $current_dir
 }
 
+# install and active plugin 
+install_and_active_plugin_wp(){
+	echo -e "\nBegin install and active plugin wp-core-plugin"
+	plugin_name="wp-core-plugin-setup"
+	plugin_dir="$current_dir/$plugin_name"
+	plugin_file_zip="$plugin_dir/$plugin_name.zip" 
+	plugin_file_zip_target="$wpdir/$plugin_name.zip"
+
+	# clone plugin repository 
+	git clone https://github.com/grayalienventures/wp-core-plugin-setup.git
+	cd $plugin_dir
+	# compress directory  to zip
+	git archive --format zip --output "$plugin_name.zip" main
+	# move plugin.zip to wpdir
+	sudo mv $plugin_file_zip $plugin_file_zip_target
+	# delete plugin repository directory 
+	sudo rm -rf $plugin_dir
+	cd $wpdir
+	# install and activate plugin
+	sudo -u www-data wp plugin install wp-core-plugin-setup.zip --activate
+	# delete file zip for plugin from directory /var/www/html/admin
+	sudo rm -rf $plugin_file_zip_target
+	echo "End install and active plugin wp-core-plugin"
+	cd $current_dir
+}
+
 # Install and configure NGINX
 install_nginx(){		
 	echo -e "\nBegin NGINX installation and configuration..."
@@ -291,3 +317,4 @@ install_node
 install_react_app 
 install_certificate_ssl
 config_wp
+install_and_active_plugin_wp
