@@ -30,7 +30,7 @@ Then, select whichever CPU options and Droplet plan is right for your project. B
 
   
 
-![Droplet CPU Option - Regular Intel CPU with SSD option for $5.00](https://github.com/grayalienventures/server-setup/blob/main/images/droplet_plan.jpg)
+![Droplet CPU Option - Regular Intel CPU with SSD option for $5.00](https://github.com/grayalienventures/server-setup/blob/main/images/droplet_plan.png)
 
   
 
