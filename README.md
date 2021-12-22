@@ -14,7 +14,7 @@ A **Virtual Private Server**, or **VPS**, is the machine that hosts your code. I
 
   
 
-At Gray Alien Ventures, we use [DigitalOcean](https://m.do.co/c/8b231954196d) for most of our projects.
+We use [DigitalOcean](https://m.do.co/c/8b231954196d) for most of our projects.
 
   
 
