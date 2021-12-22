@@ -14,11 +14,11 @@ A **Virtual Private Server**, or **VPS**, is the machine that hosts your code. I
 
   
 
-At Gray Alien Ventures, we use [DigitalOcean]([https://m.do.co/c/8b231954196d](https://m.do.co/c/8b231954196d)) for most of our projects.
+At Gray Alien Ventures, we use [DigitalOcean](https://m.do.co/c/8b231954196d](https://m.do.co/c/8b231954196d) for most of our projects.
 
   
 
-When [creating a new Droplet]([https://m.do.co/c/8b231954196d](https://m.do.co/c/8b231954196d)), select the latest LTS distribution of Ubuntu.
+When [creating a new Droplet](https://m.do.co/c/8b231954196d](https://m.do.co/c/8b231954196d), select the latest LTS distribution of Ubuntu.
 
   
 
@@ -46,4 +46,4 @@ Now that you have your host setup, you will most likely need a **domain name**, 
 
   
 
-(NameCheap)[[https://namecheap.pxf.io/qnmagq](https://namecheap.pxf.io/qnmagq)] is where we purchase our domain names.
+[NameCheap](https://namecheap.pxf.io/qnmagq](https://namecheap.pxf.io/qnmagq) is where we purchase our domain names.
