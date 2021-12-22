@@ -22,7 +22,7 @@ When [creating a new Droplet](https://m.do.co/c/8b231954196d), select the latest
 
   
 
-![Droplet OS Image - Ubuntu](/images/os_image.jpg)
+![Droplet OS Image - Ubuntu](https://github.com/grayalienventures/server-setup/blob/main/images/os_image.jpg)
 
   
 
@@ -30,7 +30,7 @@ Then, select whichever CPU options and Droplet plan is right for your project. B
 
   
 
-![Droplet CPU Option - Regular Intel CPU with SSD option for $5.00](/images/droplet_plan.jpg)
+![Droplet CPU Option - Regular Intel CPU with SSD option for $5.00](https://github.com/grayalienventures/server-setup/blob/main/images/droplet_plan.jpg)
 
   
 
