@@ -22,7 +22,7 @@ When [creating a new Droplet](https://m.do.co/c/8b231954196d), select the latest
 
   
 
-![Droplet OS Image - Ubuntu](https://github.com/grayalienventures/server-setup/blob/main/images/os_image.jpg)
+![Droplet OS Image - Ubuntu](https://github.com/grayalienventures/server-setup/blob/main/images/os_image.png)
 
   
 
