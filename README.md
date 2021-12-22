@@ -2,7 +2,7 @@
 
 
 
-At Gray Alien Ventures, a lot of our projects involve a React frontend with a WordPress backend, or sometimes even just a WordPress site. Using WordPress in this way provides us out-of-the-box functionality for authentication, user management, API endpoints, and so forth, while still maintaining the upsides of using React for the frontend website and/or app.
+At Gray Alien Ventures, a lot of our projects involve a React frontend with a WordPress backend, or sometimes even just a WordPress site. Using WordPress in this way provides us out-of-the-box functionality for authentication, user management, API endpoints, and so forth, while still maintaining the upsides of using React for the frontend website and/or web app.
 
   
 
