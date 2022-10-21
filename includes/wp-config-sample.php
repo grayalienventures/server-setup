@@ -75,7 +75,7 @@ define( 'WP_DEBUG_LOG', true );
 
 /* That's all, stop editing! Happy publishing. */
 define('FORCE_SSL_ADMIN', true);
-if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
+if (isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) &&  strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
                $_SERVER['HTTPS']='on';
 
 define('WP_HOME','wp_home_here');
