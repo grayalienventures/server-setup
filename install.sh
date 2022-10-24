@@ -269,7 +269,7 @@ SLEEPTIME=$(awk 'BEGIN{srand(); print int(rand()*(3600+1))}');
 echo "0 0,12 * * * root sleep $SLEEPTIME && certbot renew --post-hook \"service nginx reload\" -q" | sudo tee -a /etc/crontab >> $log 2>&1
 
 
-# Build React app
-echo -e "\n\n👽  building React app\n\n"
+# Build React App
+echo -e "\n\n👽  Building React App\n\n"
 cd $dir_node
 sudo -u $current_user nohup  npm run start-build-prod  >> $log 2>&1 &
