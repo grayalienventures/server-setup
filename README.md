@@ -10,7 +10,7 @@ The server setup described in this article establishes a **ReactJS frontend** th
 
 
 
-*You can also watch this [tutorial for setup information on YouTube](https://www.youtube.com/watch?v=sLDz6UC6Ycs).*
+*You can also watch this [setup tutorial on YouTube](https://www.youtube.com/watch?v=sLDz6UC6Ycs).*
 
 
 
