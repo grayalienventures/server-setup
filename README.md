@@ -82,6 +82,6 @@ sudo ./install.sh
 
 To view your website, go to the domain name you entered in the script.  Note that it may take about a minute or so for your site to be built, before which time you will see a ‘Not found.’ error.  You can log in and out to the app skeleton, as well as set personal information in the ‘Settings’ menu item.
 
-To access the WordPress backend, go to https://<your domain>/admin/wp-admin.
+To access the WordPress backend, go to `https://<your domain>/admin/wp-admin`.
 
 Happy hacking :)
