@@ -16,7 +16,7 @@ This configuration is useful for both websites and web apps, and the backend can
 
 
 
-A **VPS**, or Virtual Private Server, and domain name are required prior to running the script.  [DigitalOcean](https://m.do.co/c/8b231954196d) is the best place for VPS hosting, and as of the time of writing this, they are offering a $60 credit if you sign up via this [referral link](https://m.do.co/c/8b231954196d).  For domain names, NameCheap is our preferred source and they often provide discounts with this [referral link](https://namecheap.pxf.io/qnmagq).
+A **VPS**, or Virtual Private Server, and domain name are required prior to running the script.  [DigitalOcean](https://m.do.co/c/8b231954196d) is the best place for VPS hosting, and as of the time of writing this, they are offering a $60 credit if you sign up via this [referral link](https://m.do.co/c/8b231954196d).  For domain names, [NameCheap](https://namecheap.pxf.io/qnmagq) is our preferred source and they often provide discounts with this [referral link](https://namecheap.pxf.io/qnmagq).
 
 When creating your droplet, or DigitalOcean VPS instance, select the latest stable version of Ubuntu.  The 1 GB Regular SSD CPU for $6.00 per month suffices for most projects.
 
