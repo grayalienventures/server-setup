@@ -84,4 +84,4 @@ To view your website, go to the domain name you entered in the script.  Note tha
 
 To access the WordPress backend, go to `https://<your domain>/admin/wp-admin`.
 
-Happy hacking :)
+Happy hacking 👽 
