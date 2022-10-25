@@ -2,6 +2,10 @@
 
 
 
+[![YouTube Tutorial](https://img.youtube.com/vi/sLDz6UC6Ycs/hqdefault.jpg)](https://www.youtube.com/watch?v=sLDz6UC6Ycs)
+
+
+
 The server setup described in this article establishes a **ReactJS frontend** that communicates with a **WordPress backend**.  An NGINX reverse proxy server is used to appropriately handle requests for the NodeJS and Apache servers.  Finally, the script generates and enables an SSL via CertBot.  All of this is accomplished by running a single script!
 
 This configuration is useful for both websites and web apps, and the backend can be used for mobile apps as well.  Leveraging WordPress’s extensive library, the core plugin that is automatically uploaded and activated via the install.sh script allows developers to start building at a further stage with fully functioning authentication, API endpoints, and database structure.  Further, clients are able to easily change content via the WordPress admin panel, an ergonomic method that removes the requirement for the developer to be involved in content updates.
